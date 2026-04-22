@@ -1,21 +1,47 @@
 {
   "name": "s0nar-sdk",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "0.1.0",
+  "description": "TypeScript SDK for reading s0nar network health data from Solana",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "solana",
+    "s0nar",
+    "network-health",
+    "oracle",
+    "sdk"
+  ],
+  "author": "JkrishnaD",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/s0nar-nw/s0nar-sdk"
+  },
   "dependencies": {
     "@coral-xyz/anchor": "^0.32.1",
-    "@solana/web3.js": "^1.98.4",
+    "@solana/web3.js": "^1.98.4"
+  },
+  "devDependencies": {
     "@types/node": "^25.6.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3"
-  },
-  "devDependencies": {}
+  }
 }
