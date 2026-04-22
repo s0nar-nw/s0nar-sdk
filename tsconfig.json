@@ -10,7 +10,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "target": "ESNext",
-    "types": [],
+    "types": ["node", "bn.js"],
 
     // Other Outputs
     "sourceMap": true,
@@ -38,5 +38,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "ignoreDeprecations": "6.0",
-  }
+  },
+  "include": ["src"]
 }
