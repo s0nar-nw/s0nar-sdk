@@ -1,0 +1,1058 @@
+{
+  "address": "9eqgnuLZP5vMnxU27vZVcrhoSkf3PhhVECRKbb8P8fNQ",
+  "metadata": {
+    "name": "s0nar_program",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "accept_authority",
+      "discriminator": [107, 86, 198, 91, 33, 12, 107, 160],
+      "accounts": [
+        {
+          "name": "registry",
+          "writable": true
+        },
+        {
+          "name": "new_authority",
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "crank_aggregation",
+      "discriminator": [37, 116, 43, 137, 4, 13, 88, 26],
+      "accounts": [
+        {
+          "name": "cranker",
+          "signer": true
+        },
+        {
+          "name": "network_health",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110, 101, 116, 119, 111, 114, 107, 95, 104, 101, 97, 108, 116,
+                  104
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "registry_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [114, 101, 103, 105, 115, 116, 114, 121]
+              }
+            ]
+          }
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "deregister_observer",
+      "discriminator": [16, 4, 225, 8, 113, 188, 135, 196],
+      "accounts": [
+        {
+          "name": "caller",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "observer_wallet",
+          "docs": ["Recipient of returned stake lamports on deregistration."],
+          "writable": true
+        },
+        {
+          "name": "observer_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [111, 98, 115, 101, 114, 118, 101, 114]
+              },
+              {
+                "kind": "account",
+                "path": "observer_wallet"
+              }
+            ]
+          }
+        },
+        {
+          "name": "registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [114, 101, 103, 105, 115, 116, 114, 121]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize",
+      "discriminator": [175, 175, 109, 31, 13, 152, 155, 237],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [114, 101, 103, 105, 115, 116, 114, 121]
+              }
+            ]
+          }
+        },
+        {
+          "name": "network_health",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110, 101, 116, 119, 111, 114, 107, 95, 104, 101, 97, 108, 116,
+                  104
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "min_stake_lamports",
+          "type": "u64"
+        },
+        {
+          "name": "max_observers",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "propose_authority",
+      "discriminator": [20, 148, 236, 198, 76, 119, 99, 142],
+      "accounts": [
+        {
+          "name": "registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [114, 101, 103, 105, 115, 116, 114, 121]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": ["registry"]
+        }
+      ],
+      "args": [
+        {
+          "name": "new_authority",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "register_observer",
+      "discriminator": [95, 238, 80, 77, 247, 96, 2, 225],
+      "accounts": [
+        {
+          "name": "observer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "observer_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [111, 98, 115, 101, 114, 118, 101, 114]
+              },
+              {
+                "kind": "account",
+                "path": "observer"
+              }
+            ]
+          }
+        },
+        {
+          "name": "registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [114, 101, 103, 105, 115, 116, 114, 121]
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "region",
+          "type": {
+            "defined": {
+              "name": "Region"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "slash_observer",
+      "discriminator": [203, 50, 98, 246, 173, 53, 118, 177],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": ["registry"]
+        },
+        {
+          "name": "observer_wallet"
+        },
+        {
+          "name": "observer_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [111, 98, 115, 101, 114, 118, 101, 114]
+              },
+              {
+                "kind": "account",
+                "path": "observer_wallet"
+              }
+            ]
+          }
+        },
+        {
+          "name": "registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [114, 101, 103, 105, 115, 116, 114, 121]
+              }
+            ]
+          }
+        },
+        {
+          "name": "treasury",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "slash_bps",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "submit_attestation",
+      "discriminator": [238, 220, 255, 105, 183, 211, 40, 83],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": ["observer_account"]
+        },
+        {
+          "name": "observer_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [111, 98, 115, 101, 114, 118, 101, 114]
+              },
+              {
+                "kind": "account",
+                "path": "authority"
+              }
+            ]
+          }
+        },
+        {
+          "name": "network_health",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110, 101, 116, 119, 111, 114, 107, 95, 104, 101, 97, 108, 116,
+                  104
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [114, 101, 103, 105, 115, 116, 114, 121]
+              }
+            ]
+          }
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "tpu_reachable",
+          "type": "u16"
+        },
+        {
+          "name": "tpu_probed",
+          "type": "u16"
+        },
+        {
+          "name": "avg_rtt_us",
+          "type": "u32"
+        },
+        {
+          "name": "p95_rtt_us",
+          "type": "u32"
+        },
+        {
+          "name": "slot_latency_ms",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "update_config",
+      "discriminator": [29, 158, 252, 191, 10, 83, 219, 99],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": ["registry"]
+        },
+        {
+          "name": "registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [114, 101, 103, 105, 115, 116, 114, 121]
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "min_stake_lamports",
+          "type": {
+            "option": "u64"
+          }
+        },
+        {
+          "name": "max_observers",
+          "type": {
+            "option": "u16"
+          }
+        },
+        {
+          "name": "paused",
+          "type": {
+            "option": "bool"
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "NetworkHealthAccount",
+      "discriminator": [90, 218, 55, 105, 239, 131, 43, 68]
+    },
+    {
+      "name": "ObserverAccount",
+      "discriminator": [119, 24, 204, 152, 164, 169, 5, 101]
+    },
+    {
+      "name": "RegistryAccount",
+      "discriminator": [113, 93, 106, 201, 100, 166, 146, 98]
+    }
+  ],
+  "events": [
+    {
+      "name": "AttestationSubmitted",
+      "discriminator": [177, 213, 117, 225, 166, 11, 54, 218]
+    },
+    {
+      "name": "ConfigUpdated",
+      "discriminator": [40, 241, 230, 122, 11, 19, 198, 194]
+    },
+    {
+      "name": "ObserverDeregistered",
+      "discriminator": [78, 251, 104, 71, 5, 145, 253, 95]
+    },
+    {
+      "name": "ObserverRegistered",
+      "discriminator": [33, 248, 190, 137, 191, 38, 49, 56]
+    },
+    {
+      "name": "ObserverSlashed",
+      "discriminator": [132, 0, 84, 231, 39, 179, 32, 211]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "ValueCannotBeZero",
+      "msg": "Value cannot be zero"
+    },
+    {
+      "code": 6001,
+      "name": "RegistryPaused",
+      "msg": "Registry is currently paused"
+    },
+    {
+      "code": 6002,
+      "name": "MaxObserversReached",
+      "msg": "Maximum number of observers has been reached"
+    },
+    {
+      "code": 6003,
+      "name": "InsufficientLamports",
+      "msg": "Insufficient Lamports"
+    },
+    {
+      "code": 6004,
+      "name": "UnauthorizedObserver",
+      "msg": "Unauthorized Observer"
+    },
+    {
+      "code": 6005,
+      "name": "ObserverNotActive",
+      "msg": "Observer is not active"
+    },
+    {
+      "code": 6006,
+      "name": "ZeroValidatorsProbed",
+      "msg": "Zero validators probed"
+    },
+    {
+      "code": 6007,
+      "name": "InsufficientValidatorsProbed",
+      "msg": "Insufficient validators probed"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidReachabilityCount",
+      "msg": "Invalid reachability count"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidLatencyValue",
+      "msg": "Invalid latency submitted"
+    },
+    {
+      "code": 6010,
+      "name": "StaleAttestation",
+      "msg": "Stale attestation"
+    },
+    {
+      "code": 6011,
+      "name": "NoActiveObservers",
+      "msg": "No active observers"
+    },
+    {
+      "code": 6012,
+      "name": "ObserverAlreadyInActive",
+      "msg": "Observer already inactive"
+    },
+    {
+      "code": 6013,
+      "name": "UnAuthorizedCaller",
+      "msg": "Unauthorized caller"
+    },
+    {
+      "code": 6014,
+      "name": "InsufficientBalanceForRefund",
+      "msg": "Insufficient balance in PDA for stake refund"
+    },
+    {
+      "code": 6015,
+      "name": "InvalidSlashBps",
+      "msg": "Invalid slash basis points - must be <= 10000"
+    },
+    {
+      "code": 6016,
+      "name": "ObserverNotFound",
+      "msg": "Observer not found"
+    },
+    {
+      "code": 6017,
+      "name": "InsufficientBalanceForSlash",
+      "msg": "Insufficient balance in PDA for slash"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidPendingAuthority",
+      "msg": "Invalid or no pending authority for registry"
+    },
+    {
+      "code": 6019,
+      "name": "MaxObserversCannotBeLessThanActiveObservers",
+      "msg": "Max observers cannot be less than active observers"
+    }
+  ],
+  "types": [
+    {
+      "name": "Attestation",
+      "docs": ["Single 10-second measurement from one observer node"],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "slot",
+            "docs": ["Solana slot this measurement covers"],
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "docs": ["Timestamp of the measurement"],
+            "type": "i64"
+          },
+          {
+            "name": "avg_rtt_us",
+            "docs": ["Average RTT of the QUIC probe"],
+            "type": "u32"
+          },
+          {
+            "name": "p95_rtt_us",
+            "docs": ["P95 RTT of the QUIC probe"],
+            "type": "u32"
+          },
+          {
+            "name": "slot_latency_ms",
+            "docs": ["Slot latency of the QUIC probe"],
+            "type": "u32"
+          },
+          {
+            "name": "tpu_reachable",
+            "docs": ["Validators reachable via QUIC probe"],
+            "type": "u16"
+          },
+          {
+            "name": "tpu_probed",
+            "docs": ["Total validators probed this round"],
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AttestationSubmitted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "observer",
+            "type": "pubkey"
+          },
+          {
+            "name": "region",
+            "type": {
+              "defined": {
+                "name": "Region"
+              }
+            }
+          },
+          {
+            "name": "score",
+            "type": "u8"
+          },
+          {
+            "name": "reachability_pct",
+            "type": "u8"
+          },
+          {
+            "name": "slot_latency_ms",
+            "type": "u32"
+          },
+          {
+            "name": "slot",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ConfigUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "min_stake_lamports",
+            "type": {
+              "option": "u64"
+            }
+          },
+          {
+            "name": "max_observers",
+            "type": {
+              "option": "u16"
+            }
+          },
+          {
+            "name": "paused",
+            "type": {
+              "option": "bool"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "NetworkHealthAccount",
+      "docs": [
+        "Global oracle account - the single source of truth for dApps and UI reads"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "health_score",
+            "docs": ["The health score of the network"],
+            "type": "u8"
+          },
+          {
+            "name": "tpu_reachability_pct",
+            "docs": ["TPU reachability % averaged across all regions"],
+            "type": "u8"
+          },
+          {
+            "name": "avg_slot_latency_ms",
+            "docs": ["Average slot latency in milliseconds"],
+            "type": "u32"
+          },
+          {
+            "name": "active_observer_count",
+            "docs": [
+              "Number of active observers that contributed to this score"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "active_region_count",
+            "docs": ["Number of regions with fresh attestations"],
+            "type": "u16"
+          },
+          {
+            "name": "last_updated_slot",
+            "docs": [
+              "Slot of last aggregation — dApps check this for staleness"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "last_updated_ts",
+            "docs": ["Unix timestamp of last update"],
+            "type": "i64"
+          },
+          {
+            "name": "min_health_ever",
+            "docs": [
+              "Lowest health score ever recorded",
+              "Note: Initialized to 255 (u8::MAX) which represents \"no data yet\"."
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "max_health_ever",
+            "docs": ["Highest health score ever recorded"],
+            "type": "u8"
+          },
+          {
+            "name": "total_attestations",
+            "docs": ["Total attestations ever submitted across all observers"],
+            "type": "u64"
+          },
+          {
+            "name": "region_scores",
+            "docs": ["One entry per region"],
+            "type": {
+              "array": [
+                {
+                  "defined": {
+                    "name": "RegionScore"
+                  }
+                },
+                7
+              ]
+            }
+          },
+          {
+            "name": "bump",
+            "docs": ["PDA bump seed"],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ObserverAccount",
+      "docs": [
+        "Per-observer state - stores identity, region, stake and latest measurement"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "docs": ["The authority of the observer"],
+            "type": "pubkey"
+          },
+          {
+            "name": "region",
+            "docs": ["The region of the observer"],
+            "type": {
+              "defined": {
+                "name": "Region"
+              }
+            }
+          },
+          {
+            "name": "stake_lamports",
+            "docs": ["The stake of the observer"],
+            "type": "u64"
+          },
+          {
+            "name": "registered_at",
+            "docs": ["The timestamp when the observer was registered"],
+            "type": "i64"
+          },
+          {
+            "name": "last_attestation_slot",
+            "docs": [
+              "Solana slot of the most recent attestation submitted",
+              "Used for staleness check in crank_aggregation"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "attestation_count",
+            "docs": ["The number of attestations submitted by the observer"],
+            "type": "u64"
+          },
+          {
+            "name": "latest_attestation",
+            "docs": ["The latest attestation submitted by the observer"],
+            "type": {
+              "defined": {
+                "name": "Attestation"
+              }
+            }
+          },
+          {
+            "name": "is_active",
+            "docs": ["Whether the observer is active"],
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "docs": ["The bump seed for the PDA"],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ObserverDeregistered",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "observer",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ObserverRegistered",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "observer",
+            "type": "pubkey"
+          },
+          {
+            "name": "region",
+            "type": {
+              "defined": {
+                "name": "Region"
+              }
+            }
+          },
+          {
+            "name": "stake_lamports",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ObserverSlashed",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "observer",
+            "type": "pubkey"
+          },
+          {
+            "name": "slash_bps",
+            "type": "u16"
+          },
+          {
+            "name": "amount_slashed",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Region",
+      "docs": [
+        "Geographic region of an observer node - serializes as u8 on-chain"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Asia"
+          },
+          {
+            "name": "US"
+          },
+          {
+            "name": "EU"
+          },
+          {
+            "name": "SouthAmerica"
+          },
+          {
+            "name": "Africa"
+          },
+          {
+            "name": "Oceania"
+          },
+          {
+            "name": "Other"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RegionScore",
+      "docs": [
+        "Health snapshot for one geographic region - embedded in NetworkHealthAccount"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "region",
+            "docs": ["Which region this entry represents"],
+            "type": {
+              "defined": {
+                "name": "Region"
+              }
+            }
+          },
+          {
+            "name": "observer_count",
+            "docs": [
+              "Number of observer contributions currently represented in this region aggregate"
+            ],
+            "type": "u16"
+          },
+          {
+            "name": "health_score",
+            "docs": ["Health score from this region"],
+            "type": "u8"
+          },
+          {
+            "name": "reachability_pct",
+            "docs": ["TPU reachability % from this region"],
+            "type": "u8"
+          },
+          {
+            "name": "avg_rtt_us",
+            "docs": ["Average RTT from this region in microseconds"],
+            "type": "u32"
+          },
+          {
+            "name": "slot_latency_ms",
+            "docs": ["Slot propagation latency from this region (ms)"],
+            "type": "u32"
+          },
+          {
+            "name": "last_updated_slot",
+            "docs": ["Slot when this region last reported"],
+            "type": "u64"
+          },
+          {
+            "name": "total_health_score",
+            "docs": [
+              "Running total of health scores for observers in this region"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "total_reachability_pct",
+            "docs": [
+              "Running total of reachability percentages for observers in this region"
+            ],
+            "type": "u32"
+          },
+          {
+            "name": "total_avg_rtt_us",
+            "docs": [
+              "Running total of RTT values for observers in this region"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "total_slot_latency_ms",
+            "docs": [
+              "Running total of slot latency values for observers in this region"
+            ],
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RegistryAccount",
+      "docs": [
+        "Global registry - tracks all observer nodes and program config"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "docs": ["Admin key"],
+            "type": "pubkey"
+          },
+          {
+            "name": "pending_authority",
+            "docs": ["Pending authority for handoff"],
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "min_stake_lamports",
+            "docs": ["Minimum stake required to observe"],
+            "type": "u64"
+          },
+          {
+            "name": "observer_count",
+            "docs": ["Number of observers"],
+            "type": "u16"
+          },
+          {
+            "name": "active_count",
+            "docs": ["Currently active accounts"],
+            "type": "u16"
+          },
+          {
+            "name": "max_observers",
+            "docs": ["Maximum number of observers"],
+            "type": "u16"
+          },
+          {
+            "name": "paused",
+            "docs": ["Paused flag"],
+            "type": "bool"
+          },
+          {
+            "name": "version",
+            "docs": ["Version of the registry"],
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "docs": ["Bump seed for the PDA"],
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "SEED",
+      "type": "string",
+      "value": "\"anchor\""
+    }
+  ]
+}
