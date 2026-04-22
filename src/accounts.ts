@@ -9,19 +9,24 @@ import type {
   Registry,
 } from "./types.js";
 
+// Deployed s0nar program ID on Solana devnet.
 export const PROGRAM_ID = new PublicKey(
   "9eqgnuLZP5vMnxU27vZVcrhoSkf3PhhVECRKbb8P8fNQ",
 );
 
+// Staleness threshold for attestations and region scores. Roughly 60 seconds at 400ms per slot.
 const STALE_SLOTS = 150n;
 
 // PDA derivation
+
+// Derives the registry PDA from the seed "registry".
 export function getRegistryPDA(
   programId: PublicKey = PROGRAM_ID,
 ): [PublicKey, number] {
   return PublicKey.findProgramAddressSync([Buffer.from("registry")], programId);
 }
 
+// Derives the network health PDA from the seed "network_health".
 export function getNetworkHealthPDA(
   programId: PublicKey = PROGRAM_ID,
 ): [PublicKey, number] {
@@ -31,6 +36,7 @@ export function getNetworkHealthPDA(
   );
 }
 
+// Derives an observer PDA from the seed "observer" and the observer pubkey.
 export function getObserverPDA(
   observer: PublicKey,
   programId: PublicKey = PROGRAM_ID,
@@ -42,12 +48,15 @@ export function getObserverPDA(
 }
 
 // Helpers
+
+// Normalises Anchor u64 / i64 values (BN, number, or bigint) into a single bigint type.
 function toBigInt(val: BN | number | bigint): bigint {
   if (typeof val === "bigint") return val;
   if (typeof val === "number") return BigInt(val);
   return BigInt(val.toString());
 }
 
+// Converts an Anchor enum variant (object like { us: {} }) or string into our Region enum.
 function toRegion(val: Record<string, object> | string): Region {
   const key = typeof val === "string" ? val : (Object.keys(val)[0] ?? "other");
   const normalized = key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
@@ -63,6 +72,7 @@ function toRegion(val: Record<string, object> | string): Region {
   return (map[normalized] ?? "Other") as Region;
 }
 
+// Maps a raw Anchor Attestation struct to the clean consumer type.
 function decodeAttestation(raw: Record<string, unknown>): Attestation {
   return {
     slot: toBigInt(raw["slot"] as BN),
@@ -75,6 +85,7 @@ function decodeAttestation(raw: Record<string, unknown>): Attestation {
   };
 }
 
+// Maps a raw Anchor RegionScore struct to the clean consumer type. Internal running totals are dropped.
 function decodeRegionScore(raw: Record<string, unknown>): RegionScore {
   return {
     region: toRegion(raw["region"] as Record<string, object>),
@@ -88,6 +99,9 @@ function decodeRegionScore(raw: Record<string, unknown>): RegionScore {
 }
 
 // Account decoders
+
+// Decodes the raw NetworkHealthAccount into the clean NetworkHealth type.
+// Converts the 255 sentinel for minHealthEver into null when no data has been recorded yet.
 export function decodeNetworkHealth(
   raw: Record<string, unknown>,
 ): NetworkHealth {
@@ -109,6 +123,8 @@ export function decodeNetworkHealth(
   };
 }
 
+// Decodes the raw ObserverAccount into the clean Observer type.
+// The PDA address is passed in since Anchor does not include it in the raw payload.
 export function decodeObserver(
   raw: Record<string, unknown>,
   publicKey: PublicKey,
@@ -128,6 +144,7 @@ export function decodeObserver(
   };
 }
 
+// Decodes the raw RegistryAccount into the clean Registry type.
 export function decodeRegistry(raw: Record<string, unknown>): Registry {
   const pending = raw["pending_authority"];
   return {
