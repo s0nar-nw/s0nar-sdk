@@ -1,10 +1,18 @@
-import { Program, BN } from "@coral-xyz/anchor";
+import { Program } from "@coral-xyz/anchor";
+import BN from "bn.js";
 import {
   PublicKey,
   TransactionInstruction,
   type AccountMeta,
 } from "@solana/web3.js";
+import {
+  getNetworkHealthPDA,
+  getObserverPDA,
+  getRegistryPDA,
+} from "./accounts.js";
 import { Region } from "./types.js";
+
+const CLOCK_SYSVAR = new PublicKey("SysvarC1ock11111111111111111111111111111111");
 
 // Converts our Region enum into Anchor's enum input format like { us: {} }.
 function toAnchorRegion(region: Region): Record<string, Record<string, never>> {
@@ -39,10 +47,13 @@ export async function buildRegisterObserver(
   observer: PublicKey,
   region: Region,
 ): Promise<TransactionInstruction> {
+  const programId = program.programId;
+  const [observerAccount] = getObserverPDA(observer, programId);
+  const [registry] = getRegistryPDA(programId);
   return (program.methods as unknown as AnchorMethods)["registerObserver"]!(
     toAnchorRegion(region),
   )
-    .accounts({ observer })
+    .accounts({ observer, observerAccount, registry })
     .instruction();
 }
 
@@ -61,6 +72,10 @@ export async function buildSubmitAttestation(
   authority: PublicKey,
   params: SubmitAttestationParams,
 ): Promise<TransactionInstruction> {
+  const programId = program.programId;
+  const [observerAccount] = getObserverPDA(authority, programId);
+  const [networkHealth] = getNetworkHealthPDA(programId);
+  const [registry] = getRegistryPDA(programId);
   return (program.methods as unknown as AnchorMethods)["submitAttestation"]!(
     params.tpuReachable,
     params.tpuProbed,
@@ -68,7 +83,13 @@ export async function buildSubmitAttestation(
     params.p95RttUs,
     params.slotLatencyMs,
   )
-    .accounts({ authority })
+    .accounts({
+      authority,
+      observerAccount,
+      networkHealth,
+      registry,
+      clock: CLOCK_SYSVAR,
+    })
     .instruction();
 }
 
@@ -79,8 +100,11 @@ export async function buildDeregisterObserver(
   caller: PublicKey,
   observerWallet: PublicKey,
 ): Promise<TransactionInstruction> {
+  const programId = program.programId;
+  const [observerAccount] = getObserverPDA(observerWallet, programId);
+  const [registry] = getRegistryPDA(programId);
   return (program.methods as unknown as AnchorMethods)["deregisterObserver"]!()
-    .accounts({ caller, observerWallet })
+    .accounts({ caller, observerWallet, observerAccount, registry })
     .instruction();
 }
 
@@ -90,13 +114,21 @@ export async function buildCrankAggregation(
   cranker: PublicKey,
   observerAccounts: PublicKey[],
 ): Promise<TransactionInstruction> {
+  const programId = program.programId;
+  const [networkHealth] = getNetworkHealthPDA(programId);
+  const [registryAccount] = getRegistryPDA(programId);
   const remaining: AccountMeta[] = observerAccounts.map((pubkey) => ({
     pubkey,
     isSigner: false,
     isWritable: false,
   }));
   return (program.methods as unknown as AnchorMethods)["crankAggregation"]!()
-    .accounts({ cranker })
+    .accounts({
+      cranker,
+      networkHealth,
+      registryAccount,
+      clock: CLOCK_SYSVAR,
+    })
     .remainingAccounts(remaining)
     .instruction();
 }
@@ -108,11 +140,14 @@ export async function buildInitialize(
   minStakeLamports: bigint,
   maxObservers: number,
 ): Promise<TransactionInstruction> {
+  const programId = program.programId;
+  const [registry] = getRegistryPDA(programId);
+  const [networkHealth] = getNetworkHealthPDA(programId);
   return (program.methods as unknown as AnchorMethods)["initialize"]!(
     new BN(minStakeLamports.toString()),
     maxObservers,
   )
-    .accounts({ authority })
+    .accounts({ authority, registry, networkHealth })
     .instruction();
 }
 
@@ -124,10 +159,19 @@ export async function buildSlashObserver(
   treasury: PublicKey,
   slashBps: number,
 ): Promise<TransactionInstruction> {
+  const programId = program.programId;
+  const [observerAccount] = getObserverPDA(observerWallet, programId);
+  const [registry] = getRegistryPDA(programId);
   return (program.methods as unknown as AnchorMethods)["slashObserver"]!(
     slashBps,
   )
-    .accounts({ authority, observerWallet, treasury })
+    .accounts({
+      authority,
+      observerWallet,
+      observerAccount,
+      registry,
+      treasury,
+    })
     .instruction();
 }
 
@@ -144,6 +188,8 @@ export async function buildUpdateConfig(
   authority: PublicKey,
   params: UpdateConfigParams,
 ): Promise<TransactionInstruction> {
+  const programId = program.programId;
+  const [registry] = getRegistryPDA(programId);
   const minStake =
     params.minStakeLamports != null
       ? new BN(params.minStakeLamports.toString())
@@ -153,7 +199,7 @@ export async function buildUpdateConfig(
     params.maxObservers,
     params.paused,
   )
-    .accounts({ authority })
+    .accounts({ authority, registry })
     .instruction();
 }
 
@@ -163,10 +209,12 @@ export async function buildProposeAuthority(
   authority: PublicKey,
   newAuthority: PublicKey,
 ): Promise<TransactionInstruction> {
+  const programId = program.programId;
+  const [registry] = getRegistryPDA(programId);
   return (program.methods as unknown as AnchorMethods)["proposeAuthority"]!(
     newAuthority,
   )
-    .accounts({ authority })
+    .accounts({ authority, registry })
     .instruction();
 }
 
@@ -175,7 +223,9 @@ export async function buildAcceptAuthority(
   program: Program,
   newAuthority: PublicKey,
 ): Promise<TransactionInstruction> {
+  const programId = program.programId;
+  const [registry] = getRegistryPDA(programId);
   return (program.methods as unknown as AnchorMethods)["acceptAuthority"]!()
-    .accounts({ newAuthority })
+    .accounts({ newAuthority, registry })
     .instruction();
 }
