@@ -73,15 +73,16 @@ function toRegion(val: Record<string, object> | string): Region {
 }
 
 // Maps a raw Anchor Attestation struct to the clean consumer type.
+// Anchor returns camelCase keys regardless of the snake_case names in the IDL.
 function decodeAttestation(raw: Record<string, unknown>): Attestation {
   return {
     slot: toBigInt(raw["slot"] as BN),
     timestamp: toBigInt(raw["timestamp"] as BN),
-    avgRttUs: raw["avg_rtt_us"] as number,
-    p95RttUs: raw["p95_rtt_us"] as number,
-    slotLatencyMs: raw["slot_latency_ms"] as number,
-    tpuReachable: raw["tpu_reachable"] as number,
-    tpuProbed: raw["tpu_probed"] as number,
+    avgRttUs: raw["avgRttUs"] as number,
+    p95RttUs: raw["p95RttUs"] as number,
+    slotLatencyMs: raw["slotLatencyMs"] as number,
+    tpuReachable: raw["tpuReachable"] as number,
+    tpuProbed: raw["tpuProbed"] as number,
   };
 }
 
@@ -89,12 +90,12 @@ function decodeAttestation(raw: Record<string, unknown>): Attestation {
 function decodeRegionScore(raw: Record<string, unknown>): RegionScore {
   return {
     region: toRegion(raw["region"] as Record<string, object>),
-    observerCount: raw["observer_count"] as number,
-    healthScore: raw["health_score"] as number,
-    reachabilityPct: raw["reachability_pct"] as number,
-    avgRttUs: raw["avg_rtt_us"] as number,
-    slotLatencyMs: raw["slot_latency_ms"] as number,
-    lastUpdatedSlot: toBigInt(raw["last_updated_slot"] as BN),
+    observerCount: raw["observerCount"] as number,
+    healthScore: raw["healthScore"] as number,
+    reachabilityPct: raw["reachabilityPct"] as number,
+    avgRttUs: raw["avgRttUs"] as number,
+    slotLatencyMs: raw["slotLatencyMs"] as number,
+    lastUpdatedSlot: toBigInt(raw["lastUpdatedSlot"] as BN),
   };
 }
 
@@ -105,19 +106,19 @@ function decodeRegionScore(raw: Record<string, unknown>): RegionScore {
 export function decodeNetworkHealth(
   raw: Record<string, unknown>,
 ): NetworkHealth {
-  const minRaw = raw["min_health_ever"] as number;
+  const minRaw = raw["minHealthEver"] as number;
   return {
-    healthScore: raw["health_score"] as number,
-    tpuReachabilityPct: raw["tpu_reachability_pct"] as number,
-    avgSlotLatencyMs: raw["avg_slot_latency_ms"] as number,
-    activeObserverCount: raw["active_observer_count"] as number,
-    activeRegionCount: raw["active_region_count"] as number,
-    lastUpdatedSlot: toBigInt(raw["last_updated_slot"] as BN),
-    lastUpdatedTs: toBigInt(raw["last_updated_ts"] as BN),
+    healthScore: raw["healthScore"] as number,
+    tpuReachabilityPct: raw["tpuReachabilityPct"] as number,
+    avgSlotLatencyMs: raw["avgSlotLatencyMs"] as number,
+    activeObserverCount: raw["activeObserverCount"] as number,
+    activeRegionCount: raw["activeRegionCount"] as number,
+    lastUpdatedSlot: toBigInt(raw["lastUpdatedSlot"] as BN),
+    lastUpdatedTs: toBigInt(raw["lastUpdatedTs"] as BN),
     minHealthEver: minRaw === 255 ? null : minRaw,
-    maxHealthEver: raw["max_health_ever"] as number,
-    totalAttestations: toBigInt(raw["total_attestations"] as BN),
-    regionScores: (raw["region_scores"] as Record<string, unknown>[]).map(
+    maxHealthEver: raw["maxHealthEver"] as number,
+    totalAttestations: toBigInt(raw["totalAttestations"] as BN),
+    regionScores: (raw["regionScores"] as Record<string, unknown>[]).map(
       decodeRegionScore,
     ),
   };
@@ -131,29 +132,29 @@ export function decodeObserver(
 ): Observer {
   return {
     publicKey,
-    authority: new PublicKey(raw["authority"] as string),
+    authority: raw["authority"] as PublicKey,
     region: toRegion(raw["region"] as Record<string, object>),
-    stakeLamports: toBigInt(raw["stake_lamports"] as BN),
-    registeredAt: toBigInt(raw["registered_at"] as BN),
-    lastAttestationSlot: toBigInt(raw["last_attestation_slot"] as BN),
-    attestationCount: toBigInt(raw["attestation_count"] as BN),
+    stakeLamports: toBigInt(raw["stakeLamports"] as BN),
+    registeredAt: toBigInt(raw["registeredAt"] as BN),
+    lastAttestationSlot: toBigInt(raw["lastAttestationSlot"] as BN),
+    attestationCount: toBigInt(raw["attestationCount"] as BN),
     latestAttestation: decodeAttestation(
-      raw["latest_attestation"] as Record<string, unknown>,
+      raw["latestAttestation"] as Record<string, unknown>,
     ),
-    isActive: raw["is_active"] as boolean,
+    isActive: raw["isActive"] as boolean,
   };
 }
 
 // Decodes the raw RegistryAccount into the clean Registry type.
 export function decodeRegistry(raw: Record<string, unknown>): Registry {
-  const pending = raw["pending_authority"];
+  const pending = raw["pendingAuthority"] as PublicKey | null | undefined;
   return {
-    authority: new PublicKey(raw["authority"] as string),
-    pendingAuthority: pending != null ? new PublicKey(pending as string) : null,
-    minStakeLamports: toBigInt(raw["min_stake_lamports"] as BN),
-    observerCount: raw["observer_count"] as number,
-    activeCount: raw["active_count"] as number,
-    maxObservers: raw["max_observers"] as number,
+    authority: raw["authority"] as PublicKey,
+    pendingAuthority: pending ?? null,
+    minStakeLamports: toBigInt(raw["minStakeLamports"] as BN),
+    observerCount: raw["observerCount"] as number,
+    activeCount: raw["activeCount"] as number,
+    maxObservers: raw["maxObservers"] as number,
     paused: raw["paused"] as boolean,
     version: raw["version"] as number,
   };
