@@ -1,0 +1,19 @@
+{
+  "name": "s0nar-sdk-examples",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "read": "tsx src/read-health.ts",
+    "observers": "tsx src/list-observers.ts",
+    "build-ix": "tsx src/build-instructions.ts"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.4",
+    "s0nar-sdk": "file:.."
+  },
+  "devDependencies": {
+    "tsx": "^4.20.0",
+    "typescript": "^5.7.0"
+  }
+}
