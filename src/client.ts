@@ -9,6 +9,7 @@ import {
   Keypair,
   PublicKey,
   Transaction,
+  TransactionInstruction,
   VersionedTransaction,
 } from "@solana/web3.js";
 import idlJson from "./idl/s0nar_program.json";
@@ -21,6 +22,19 @@ import {
   getObserverPDA,
   getRegistryPDA,
 } from "./accounts.js";
+import {
+  buildAcceptAuthority,
+  buildCrankAggregation,
+  buildDeregisterObserver,
+  buildInitialize,
+  buildProposeAuthority,
+  buildRegisterObserver,
+  buildSlashObserver,
+  buildSubmitAttestation,
+  buildUpdateConfig,
+  type SubmitAttestationParams,
+  type UpdateConfigParams,
+} from "./instructions.js";
 import type { NetworkHealth, Observer, Region, Registry } from "./types.js";
 
 export interface S0narClientOptions {
@@ -32,11 +46,49 @@ export interface S0narClientOptions {
 export interface S0narClient {
   readonly programId: PublicKey;
   readonly connection: Connection;
+  // Reads
   getNetworkHealth(): Promise<NetworkHealth>;
   getRegistry(): Promise<Registry>;
   getObserver(observerPubkey: PublicKey): Promise<Observer>;
   getAllObservers(): Promise<Observer[]>;
   getObserversByRegion(region: Region): Promise<Observer[]>;
+  // Instruction builders
+  registerObserver(
+    observer: PublicKey,
+    region: Region,
+  ): Promise<TransactionInstruction>;
+  submitAttestation(
+    authority: PublicKey,
+    params: SubmitAttestationParams,
+  ): Promise<TransactionInstruction>;
+  deregisterObserver(
+    caller: PublicKey,
+    observerWallet: PublicKey,
+  ): Promise<TransactionInstruction>;
+  crankAggregation(
+    cranker: PublicKey,
+    observerAccounts: PublicKey[],
+  ): Promise<TransactionInstruction>;
+  initialize(
+    authority: PublicKey,
+    minStakeLamports: bigint,
+    maxObservers: number,
+  ): Promise<TransactionInstruction>;
+  slashObserver(
+    authority: PublicKey,
+    observerWallet: PublicKey,
+    treasury: PublicKey,
+    slashBps: number,
+  ): Promise<TransactionInstruction>;
+  updateConfig(
+    authority: PublicKey,
+    params: UpdateConfigParams,
+  ): Promise<TransactionInstruction>;
+  proposeAuthority(
+    authority: PublicKey,
+    newAuthority: PublicKey,
+  ): Promise<TransactionInstruction>;
+  acceptAuthority(newAuthority: PublicKey): Promise<TransactionInstruction>;
 }
 
 // Builds a dummy wallet for read-only usage. Anchor requires a wallet but reads never sign.
@@ -126,10 +178,36 @@ export function createS0narClient(opts: S0narClientOptions): S0narClient {
   return {
     programId,
     connection,
+    // Reads
     getNetworkHealth,
     getRegistry,
     getObserver,
     getAllObservers,
     getObserversByRegion,
+    // Instruction builders
+    registerObserver: (observer, region) =>
+      buildRegisterObserver(program, observer, region),
+    submitAttestation: (authority, params) =>
+      buildSubmitAttestation(program, authority, params),
+    deregisterObserver: (caller, observerWallet) =>
+      buildDeregisterObserver(program, caller, observerWallet),
+    crankAggregation: (cranker, observerAccounts) =>
+      buildCrankAggregation(program, cranker, observerAccounts),
+    initialize: (authority, minStakeLamports, maxObservers) =>
+      buildInitialize(program, authority, minStakeLamports, maxObservers),
+    slashObserver: (authority, observerWallet, treasury, slashBps) =>
+      buildSlashObserver(
+        program,
+        authority,
+        observerWallet,
+        treasury,
+        slashBps,
+      ),
+    updateConfig: (authority, params) =>
+      buildUpdateConfig(program, authority, params),
+    proposeAuthority: (authority, newAuthority) =>
+      buildProposeAuthority(program, authority, newAuthority),
+    acceptAuthority: (newAuthority) =>
+      buildAcceptAuthority(program, newAuthority),
   };
 }
