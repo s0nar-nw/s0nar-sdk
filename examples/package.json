@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@solana/web3.js": "^1.98.4",
-    "s0nar-sdk": "file:.."
+    "s0nar-sdk": "^0.1.0"
   },
   "devDependencies": {
     "tsx": "^4.20.0",
