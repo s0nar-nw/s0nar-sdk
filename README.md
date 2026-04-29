@@ -115,6 +115,28 @@ Each builder returns a `Promise<TransactionInstruction>` that the caller compose
 | `proposeAuthority(authority, newAuthority)`            | Authority             |
 | `acceptAuthority(newAuthority)`                        | New authority         |
 
+### Event subscriptions
+
+Each subscription returns a numeric listener id. Pass it to `removeEventListener` to stop receiving events.
+
+```ts
+const id = client.onAttestationSubmitted((event, slot) => {
+  console.log("New attestation:", event.observer.toBase58(), event.score);
+});
+
+// later
+await client.removeEventListener(id);
+```
+
+| Method                       | Event                       |
+| ---------------------------- | --------------------------- |
+| `onAttestationSubmitted(cb)` | `AttestationSubmittedEvent` |
+| `onObserverRegistered(cb)`   | `ObserverRegisteredEvent`   |
+| `onObserverDeregistered(cb)` | `ObserverDeregisteredEvent` |
+| `onObserverSlashed(cb)`      | `ObserverSlashedEvent`      |
+| `onConfigUpdated(cb)`        | `ConfigUpdatedEvent`        |
+| `removeEventListener(id)`    | Unsubscribe                 |
+
 ### Utility helpers
 
 | Function                                 | Purpose                                            |
@@ -138,6 +160,12 @@ Each builder returns a `Promise<TransactionInstruction>` that the caller compose
 ### Regions
 
 `Asia` · `US` · `EU` · `SouthAmerica` · `Africa` · `Oceania` · `Other`
+
+## Notes
+
+- All read methods perform a single RPC call. Wrap them in retry logic for production use.
+- `getAllObservers` issues an unfiltered `getProgramAccounts`. Suitable for small fleets. For large deployments prefer `getObserversByRegion` or filter on `isActive` after fetching.
+- `healthStatus` returns `"stale"` only when `currentSlot` is passed in. Always pass it for write paths or anything making decisions on the score.
 
 ## Status
 
