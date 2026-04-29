@@ -35,7 +35,24 @@ import {
   type SubmitAttestationParams,
   type UpdateConfigParams,
 } from "./instructions.js";
-import type { NetworkHealth, Observer, Region, Registry } from "./types.js";
+import {
+  decodeAttestationSubmitted,
+  decodeConfigUpdated,
+  decodeObserverDeregistered,
+  decodeObserverRegistered,
+  decodeObserverSlashed,
+} from "./events.js";
+import type {
+  AttestationSubmittedEvent,
+  ConfigUpdatedEvent,
+  NetworkHealth,
+  Observer,
+  ObserverDeregisteredEvent,
+  ObserverRegisteredEvent,
+  ObserverSlashedEvent,
+  Region,
+  Registry,
+} from "./types.js";
 
 export interface S0narClientOptions {
   connection: Connection;
@@ -89,6 +106,23 @@ export interface S0narClient {
     newAuthority: PublicKey,
   ): Promise<TransactionInstruction>;
   acceptAuthority(newAuthority: PublicKey): Promise<TransactionInstruction>;
+  // Event subscriptions. Each method returns a numeric listener id passed to removeEventListener to stop receiving events.
+  onAttestationSubmitted(
+    callback: (event: AttestationSubmittedEvent, slot: number) => void,
+  ): number;
+  onObserverRegistered(
+    callback: (event: ObserverRegisteredEvent, slot: number) => void,
+  ): number;
+  onObserverDeregistered(
+    callback: (event: ObserverDeregisteredEvent, slot: number) => void,
+  ): number;
+  onObserverSlashed(
+    callback: (event: ObserverSlashedEvent, slot: number) => void,
+  ): number;
+  onConfigUpdated(
+    callback: (event: ConfigUpdatedEvent, slot: number) => void,
+  ): number;
+  removeEventListener(listenerId: number): Promise<void>;
 }
 
 // Builds a dummy wallet for read-only usage. Anchor requires a wallet but reads never sign.
@@ -209,5 +243,37 @@ export function createS0narClient(opts: S0narClientOptions): S0narClient {
       buildProposeAuthority(program, authority, newAuthority),
     acceptAuthority: (newAuthority) =>
       buildAcceptAuthority(program, newAuthority),
+    // Event subscriptions
+    onAttestationSubmitted: (callback) =>
+      program.addEventListener("attestationSubmitted", (raw, slot) =>
+        callback(
+          decodeAttestationSubmitted(raw as Record<string, unknown>),
+          slot,
+        ),
+      ),
+    onObserverRegistered: (callback) =>
+      program.addEventListener("observerRegistered", (raw, slot) =>
+        callback(
+          decodeObserverRegistered(raw as Record<string, unknown>),
+          slot,
+        ),
+      ),
+    onObserverDeregistered: (callback) =>
+      program.addEventListener("observerDeregistered", (raw, slot) =>
+        callback(
+          decodeObserverDeregistered(raw as Record<string, unknown>),
+          slot,
+        ),
+      ),
+    onObserverSlashed: (callback) =>
+      program.addEventListener("observerSlashed", (raw, slot) =>
+        callback(decodeObserverSlashed(raw as Record<string, unknown>), slot),
+      ),
+    onConfigUpdated: (callback) =>
+      program.addEventListener("configUpdated", (raw, slot) =>
+        callback(decodeConfigUpdated(raw as Record<string, unknown>), slot),
+      ),
+    removeEventListener: (listenerId) =>
+      program.removeEventListener(listenerId),
   };
 }
