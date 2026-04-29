@@ -27,7 +27,7 @@ async function main() {
 
   console.log("=== Network Health ===");
   console.log("Health Score:        ", health.healthScore, "/ 100");
-  console.log("Status:              ", healthStatus(health));
+  console.log("Status:              ", healthStatus(health, currentSlot));
   console.log("Reachability:        ", health.tpuReachabilityPct, "%");
   console.log("Avg Slot Latency:    ", health.avgSlotLatencyMs, "ms");
   console.log("Active Observers:    ", health.activeObserverCount);

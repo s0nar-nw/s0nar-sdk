@@ -30,10 +30,16 @@ export function isDegraded(
   return networkHealth.healthScore < threshold;
 }
 
-// Returns "healthy" | "degraded" | "critical" based on the health score.
+// Returns the network status based on score and optional staleness.
+// When currentSlot is provided and the data is stale, returns "stale" regardless of score.
+// Consumers reading the oracle for write paths should always pass currentSlot.
 export function healthStatus(
   networkHealth: NetworkHealth,
-): "healthy" | "degraded" | "critical" {
+  currentSlot?: bigint,
+): "healthy" | "degraded" | "critical" | "stale" {
+  if (currentSlot !== undefined && isStale(networkHealth, currentSlot)) {
+    return "stale";
+  }
   if (networkHealth.healthScore < DEFAULT_CRITICAL_THRESHOLD) return "critical";
   if (networkHealth.healthScore < DEFAULT_DEGRADED_THRESHOLD) return "degraded";
   return "healthy";
