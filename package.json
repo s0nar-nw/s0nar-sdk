@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "description": "TypeScript SDK for reading s0nar network health data from Solana",
   "main": "./dist/index.js",
-  "module": "ECMAScript",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -34,7 +35,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/s0nar-nw/s0nar-sdk"
+    "url": "git+https://github.com/s0nar-nw/s0nar-sdk.git"
+  },
+  "homepage": "https://s0nar.online",
+  "bugs": {
+    "url": "https://github.com/s0nar-nw/s0nar-sdk/issues"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.32.1",
