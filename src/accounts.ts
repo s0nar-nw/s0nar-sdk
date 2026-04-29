@@ -17,6 +17,10 @@ export const PROGRAM_ID = new PublicKey(
 // Staleness threshold for attestations and region scores. Roughly 60 seconds at 400ms per slot.
 const STALE_SLOTS = 150n;
 
+// Registry layout version this SDK was built against. A mismatch suggests the program
+// has been upgraded with an incompatible layout and consumers should upgrade the SDK.
+const SUPPORTED_REGISTRY_VERSION = 1;
+
 // PDA derivation
 
 // Derives the registry PDA from the seed "registry".
@@ -146,7 +150,16 @@ export function decodeObserver(
 }
 
 // Decodes the raw RegistryAccount into the clean Registry type.
+// Warns when the on-chain version does not match SUPPORTED_REGISTRY_VERSION.
+// Warning rather than throwing so consumers can override and proceed.
 export function decodeRegistry(raw: Record<string, unknown>): Registry {
+  const version = raw["version"] as number;
+  if (version !== SUPPORTED_REGISTRY_VERSION) {
+    console.warn(
+      `s0nar-sdk: registry version ${version} is not supported by this SDK ` +
+        `(expected ${SUPPORTED_REGISTRY_VERSION}). Upgrade s0nar-sdk to a compatible version.`,
+    );
+  }
   const pending = raw["pendingAuthority"] as PublicKey | null | undefined;
   return {
     authority: raw["authority"] as PublicKey,
