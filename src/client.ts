@@ -125,12 +125,15 @@ export interface S0narClient {
   removeEventListener(listenerId: number): Promise<void>;
 }
 
+// Stable system program address used as the dummy wallet pubkey for read-only clients.
+// Surfacing the system program in any logs that print the wallet pubkey clearly signals "no real wallet".
+const READ_ONLY_PUBKEY = new PublicKey("11111111111111111111111111111111");
+
 // Builds a dummy wallet for read-only usage. Anchor requires a wallet but reads never sign.
 function createReadOnlyWallet(): Wallet {
-  const kp = Keypair.generate();
   return {
-    publicKey: kp.publicKey,
-    payer: kp,
+    publicKey: READ_ONLY_PUBKEY,
+    payer: Keypair.generate(),
     signTransaction: async <T extends Transaction | VersionedTransaction>(
       tx: T,
     ): Promise<T> => tx,
