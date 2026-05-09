@@ -43,4 +43,8 @@ export {
   regionLabel,
   lamportsToSol,
   latencyScore,
+  isConsensusCritical,
+  stakeReachStatus,
+  dominantClient,
+  clientDiversityIndex,
 } from "./utils.js";

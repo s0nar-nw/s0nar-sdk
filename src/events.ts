@@ -42,6 +42,12 @@ export function decodeAttestationSubmitted(
     reachabilityPct: raw["reachabilityPct"] as number,
     slotLatencyMs: raw["slotLatencyMs"] as number,
     slot: toBigInt(raw["slot"] as BN),
+    agaveCount: raw["agaveCount"] as number,
+    firedancerCount: raw["firedancerCount"] as number,
+    jitoCount: raw["jitoCount"] as number,
+    solanaLabsCount: raw["solanaLabsCount"] as number,
+    otherCount: raw["otherCount"] as number,
+    reachableStakePct: raw["reachableStakePct"] as number,
   };
 }
 

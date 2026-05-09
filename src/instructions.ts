@@ -12,7 +12,9 @@ import {
 } from "./accounts.js";
 import { Region } from "./types.js";
 
-const CLOCK_SYSVAR = new PublicKey("SysvarC1ock11111111111111111111111111111111");
+const CLOCK_SYSVAR = new PublicKey(
+  "SysvarC1ock11111111111111111111111111111111",
+);
 
 // Converts our Region enum into Anchor's enum input format like { us: {} }.
 function toAnchorRegion(region: Region): Record<string, Record<string, never>> {
@@ -64,6 +66,12 @@ export interface SubmitAttestationParams {
   avgRttUs: number;
   p95RttUs: number;
   slotLatencyMs: number;
+  agaveCount: number;
+  firedancerCount: number;
+  jitoCount: number;
+  solanaLabsCount: number;
+  otherCount: number;
+  reachableStakePct: number;
 }
 
 // Submits a 10-second measurement. Authority must be the observer's authority key.
@@ -82,6 +90,12 @@ export async function buildSubmitAttestation(
     params.avgRttUs,
     params.p95RttUs,
     params.slotLatencyMs,
+    params.agaveCount,
+    params.firedancerCount,
+    params.jitoCount,
+    params.solanaLabsCount,
+    params.otherCount,
+    params.reachableStakePct,
   )
     .accounts({
       authority,
