@@ -821,23 +821,23 @@
             }
           },
           {
-            "name": "agave_pct",
+            "name": "agave_count",
             "type": "u8"
           },
           {
-            "name": "firedancer_pct",
+            "name": "firedancer_count",
             "type": "u8"
           },
           {
-            "name": "jito_pct",
+            "name": "jito_count",
             "type": "u8"
           },
           {
-            "name": "solana_labs_pct",
+            "name": "solana_labs_count",
             "type": "u8"
           },
           {
-            "name": "other_pct",
+            "name": "other_count",
             "type": "u8"
           },
           {

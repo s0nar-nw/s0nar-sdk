@@ -59,11 +59,11 @@ export interface NetworkHealth {
   maxHealthEver: number;
   totalAttestations: bigint;
   regionScores: RegionScore[];
-  agavePct: number;
-  firedancerPct: number;
-  jitoPct: number;
-  solanaLabsPct: number;
-  otherPct: number;
+  agaveCount: number;
+  firedancerCount: number;
+  jitoCount: number;
+  solanaLabsCount: number;
+  otherCount: number;
 }
 
 // Per-observer state. Stores identity, region, stake, and most recent attestation.

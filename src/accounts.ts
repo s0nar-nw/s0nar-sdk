@@ -137,11 +137,11 @@ export function decodeNetworkHealth(
     regionScores: (raw["regionScores"] as Record<string, unknown>[]).map(
       decodeRegionScore,
     ),
-    agavePct: raw["agavePct"] as number,
-    firedancerPct: raw["firedancerPct"] as number,
-    jitoPct: raw["jitoPct"] as number,
-    solanaLabsPct: raw["solanaLabsPct"] as number,
-    otherPct: raw["otherPct"] as number,
+    agaveCount: raw["agaveCount"] as number,
+    firedancerCount: raw["firedancerCount"] as number,
+    jitoCount: raw["jitoCount"] as number,
+    solanaLabsCount: raw["solanaLabsCount"] as number,
+    otherCount: raw["otherCount"] as number,
   };
 }
 
