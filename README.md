@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" />
   <img src="https://img.shields.io/badge/Solana-devnet-9945FF?logo=solana" alt="Solana devnet" />
-  <img src="https://img.shields.io/badge/npm-0.1.0-CB3837?logo=npm" alt="npm 0.1.0" />
+  <img src="https://img.shields.io/badge/npm-0.2.0-CB3837?logo=npm" alt="npm 0.2.0" />
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript" alt="TypeScript" />
 </p>
 
@@ -32,7 +32,8 @@ This SDK wraps the on-chain data into clean TypeScript types and exposes both re
 - Reads `NetworkHealthAccount`, `ObserverAccount`, and `RegistryAccount` as plain TypeScript objects
 - Derives all PDAs internally
 - Builds every program instruction as a `TransactionInstruction` for composing into transactions
-- Provides utility helpers: `isStale`, `isObserverStale`, `isDegraded`, `healthStatus`, `regionLabel`, `lamportsToSol`, `latencyScore`
+- Surfaces validator client diversity (Agave / Firedancer / Jito / Solana Labs / Other) and stake-weighted reach for consensus-aware dApps
+- Provides utility helpers: `isStale`, `isObserverStale`, `isDegraded`, `healthStatus`, `regionLabel`, `lamportsToSol`, `latencyScore`, `isConsensusCritical`, `stakeReachStatus`, `dominantClient`, `clientDiversityIndex`
 
 ## Install
 
@@ -53,7 +54,39 @@ const health = await client.getNetworkHealth();
 console.log(health.healthScore); // 0 to 100
 console.log(health.tpuReachabilityPct); // % validators reachable
 console.log(health.avgSlotLatencyMs); // slot propagation latency
+
+// Client diversity (global, averaged across active regions)
+console.log(health.agavePct, health.firedancerPct, health.jitoPct);
 ```
+
+## Client Diversity & Stake-Weighted Reach
+
+Every attestation now carries client distribution counts and stake-weighted reachability. Use these to gate high-value writes on actual consensus capacity rather than raw observer counts.
+
+```ts
+import {
+  clientDiversityIndex,
+  dominantClient,
+  isConsensusCritical,
+  stakeReachStatus,
+} from "s0nar-sdk";
+
+const health = await client.getNetworkHealth();
+
+for (const region of health.regionScores) {
+  if (region.observerCount === 0) continue;
+
+  const dominant = dominantClient(region);
+  const diversity = clientDiversityIndex(region); // 0-100, higher = more even
+  const status = stakeReachStatus(region.reachableStakePct); // healthy | degraded | critical
+
+  if (isConsensusCritical(region.reachableStakePct)) {
+    // Below 67% stake reach. Network cannot finalize. Halt high-value writes.
+  }
+}
+```
+
+Stake reach thresholds: `>= 80%` healthy, `>= 67%` degraded, `< 67%` critical (loses finality quorum).
 
 ## Examples
 
@@ -65,6 +98,7 @@ npm install
 npm run read         # reads NetworkHealth + Registry
 npm run observers    # lists all observers grouped by region
 npm run build-ix     # builds every instruction without sending
+npm run diversity    # client distribution + stake-weighted consensus gate
 ```
 
 ## Health Score Formula
@@ -148,6 +182,10 @@ await client.removeEventListener(id);
 | `regionLabel(region)`                    | UI label like `"United States"` for `Region.US`    |
 | `lamportsToSol(lamports)`                | Convert bigint lamports to SOL number              |
 | `latencyScore(slotLatencyMs)`            | Compute the on-chain latency component score       |
+| `isConsensusCritical(reachableStakePct)` | True when stake reach below 67% finality threshold |
+| `stakeReachStatus(reachableStakePct)`    | `"healthy"` (>=80%), `"degraded"` (>=67%), `"critical"` |
+| `dominantClient(regionScore)`            | Largest validator client in a region by count      |
+| `clientDiversityIndex(regionScore)`      | 0-100 score. 100 = perfectly even, 0 = monoculture |
 
 ### PDA helpers
 
@@ -171,7 +209,7 @@ await client.removeEventListener(id);
 
 > Early development. API may change before `1.0.0`.
 
-Program ID (devnet): `9eqgnuLZP5vMnxU27vZVcrhoSkf3PhhVECRKbb8P8fNQ`
+Program ID (devnet): `DcVVV9W4CtitVvRD7Jf8ptG24Lh9qte4g6tUkwu4t16a`
 
 ## License
 
