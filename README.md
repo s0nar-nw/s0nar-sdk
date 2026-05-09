@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/text-logo.svg" alt="s0nar" width="320" />
+  <img src="public/logo.svg" alt="s0nar" width="320" />
 </p>
 
 <h1 align="center">s0nar-sdk</h1>
