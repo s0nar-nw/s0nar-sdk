@@ -18,6 +18,7 @@ npm install
 | `npm run pdas`      | Derives PDAs and fetches a single observer by authority                                    | `getRegistryPDA`, `getNetworkHealthPDA`, `getObserverPDA`, `getObserver`, `latencyScore`, `PROGRAM_ID` |
 | `npm run subscribe` | Subscribes to live program events for 60 seconds, then unsubscribes                       | `onAttestationSubmitted`, `onObserverRegistered`, `onObserverDeregistered`, `onObserverSlashed`, `onConfigUpdated`, `removeEventListener` |
 | `npm run build-ix`  | Builds every instruction (without sending), shows account counts and tx composition       | All 9 instruction builders (`registerObserver`, `submitAttestation`, etc.)                        |
+| `npm run diversity` | Prints global client distribution, per-region dominant client, diversity index, and stake-weighted consensus gate | `getNetworkHealth`, `dominantClient`, `clientDiversityIndex`, `stakeReachStatus`, `isConsensusCritical`, `regionLabel` |
 
 ## Notes
 
