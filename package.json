@@ -1,6 +1,6 @@
 {
   "name": "s0nar-sdk",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "TypeScript SDK for reading s0nar network health data from Solana",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

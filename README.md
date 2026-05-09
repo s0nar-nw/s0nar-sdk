@@ -11,7 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" />
   <img src="https://img.shields.io/badge/Solana-devnet-9945FF?logo=solana" alt="Solana devnet" />
-  <img src="https://img.shields.io/badge/npm-0.2.0-CB3837?logo=npm" alt="npm 0.2.0" />
+  <img src="https://img.shields.io/badge/npm-0.3.0-CB3837?logo=npm" alt="npm 0.3.0" />
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript" alt="TypeScript" />
 </p>
 
@@ -55,8 +55,8 @@ console.log(health.healthScore); // 0 to 100
 console.log(health.tpuReachabilityPct); // % validators reachable
 console.log(health.avgSlotLatencyMs); // slot propagation latency
 
-// Client diversity (global, averaged across active regions)
-console.log(health.agavePct, health.firedancerPct, health.jitoPct);
+// Validator counts by client (global, averaged across active regions)
+console.log(health.agaveCount, health.firedancerCount, health.jitoCount);
 ```
 
 ## Client Diversity & Stake-Weighted Reach
