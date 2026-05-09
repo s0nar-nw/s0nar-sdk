@@ -11,7 +11,7 @@ import type {
 
 // Deployed s0nar program ID on Solana devnet.
 export const PROGRAM_ID = new PublicKey(
-  "9eqgnuLZP5vMnxU27vZVcrhoSkf3PhhVECRKbb8P8fNQ",
+  "DcVVV9W4CtitVvRD7Jf8ptG24Lh9qte4g6tUkwu4t16a",
 );
 
 // Staleness threshold for attestations and region scores. Roughly 60 seconds at 400ms per slot.
@@ -87,6 +87,12 @@ function decodeAttestation(raw: Record<string, unknown>): Attestation {
     slotLatencyMs: raw["slotLatencyMs"] as number,
     tpuReachable: raw["tpuReachable"] as number,
     tpuProbed: raw["tpuProbed"] as number,
+    agaveCount: raw["agaveCount"] as number,
+    firedancerCount: raw["firedancerCount"] as number,
+    jitoCount: raw["jitoCount"] as number,
+    solanaLabsCount: raw["solanaLabsCount"] as number,
+    otherCount: raw["otherCount"] as number,
+    reachableStakePct: raw["reachableStakePct"] as number,
   };
 }
 
@@ -100,6 +106,12 @@ function decodeRegionScore(raw: Record<string, unknown>): RegionScore {
     avgRttUs: raw["avgRttUs"] as number,
     slotLatencyMs: raw["slotLatencyMs"] as number,
     lastUpdatedSlot: toBigInt(raw["lastUpdatedSlot"] as BN),
+    agaveCount: raw["agaveCount"] as number,
+    firedancerCount: raw["firedancerCount"] as number,
+    jitoCount: raw["jitoCount"] as number,
+    solanaLabsCount: raw["solanaLabsCount"] as number,
+    otherCount: raw["otherCount"] as number,
+    reachableStakePct: raw["reachableStakePct"] as number,
   };
 }
 
@@ -125,6 +137,11 @@ export function decodeNetworkHealth(
     regionScores: (raw["regionScores"] as Record<string, unknown>[]).map(
       decodeRegionScore,
     ),
+    agavePct: raw["agavePct"] as number,
+    firedancerPct: raw["firedancerPct"] as number,
+    jitoPct: raw["jitoPct"] as number,
+    solanaLabsPct: raw["solanaLabsPct"] as number,
+    otherPct: raw["otherPct"] as number,
   };
 }
 

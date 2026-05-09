@@ -20,6 +20,12 @@ export interface Attestation {
   slotLatencyMs: number;
   tpuReachable: number;
   tpuProbed: number;
+  agaveCount: number;
+  firedancerCount: number;
+  jitoCount: number;
+  solanaLabsCount: number;
+  otherCount: number;
+  reachableStakePct: number;
 }
 
 // Health snapshot for one geographic region. Embedded in NetworkHealth.
@@ -31,6 +37,12 @@ export interface RegionScore {
   avgRttUs: number;
   slotLatencyMs: number;
   lastUpdatedSlot: bigint;
+  agaveCount: number;
+  firedancerCount: number;
+  jitoCount: number;
+  solanaLabsCount: number;
+  otherCount: number;
+  reachableStakePct: number;
 }
 
 // Global oracle state. Single source of truth for dApps reading network health.
@@ -47,6 +59,11 @@ export interface NetworkHealth {
   maxHealthEver: number;
   totalAttestations: bigint;
   regionScores: RegionScore[];
+  agavePct: number;
+  firedancerPct: number;
+  jitoPct: number;
+  solanaLabsPct: number;
+  otherPct: number;
 }
 
 // Per-observer state. Stores identity, region, stake, and most recent attestation.
@@ -85,6 +102,12 @@ export interface AttestationSubmittedEvent {
   reachabilityPct: number;
   slotLatencyMs: number;
   slot: bigint;
+  agaveCount: number;
+  firedancerCount: number;
+  jitoCount: number;
+  solanaLabsCount: number;
+  otherCount: number;
+  reachableStakePct: number;
 }
 
 // Emitted when an observer registers.

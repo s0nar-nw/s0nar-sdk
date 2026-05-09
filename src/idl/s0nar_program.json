@@ -1,5 +1,5 @@
 {
-  "address": "9eqgnuLZP5vMnxU27vZVcrhoSkf3PhhVECRKbb8P8fNQ",
+  "address": "DcVVV9W4CtitVvRD7Jf8ptG24Lh9qte4g6tUkwu4t16a",
   "metadata": {
     "name": "s0nar_program",
     "version": "0.1.0",
@@ -375,6 +375,30 @@
         {
           "name": "slot_latency_ms",
           "type": "u32"
+        },
+        {
+          "name": "agave_count",
+          "type": "u16"
+        },
+        {
+          "name": "firedancer_count",
+          "type": "u16"
+        },
+        {
+          "name": "jito_count",
+          "type": "u16"
+        },
+        {
+          "name": "solana_labs_count",
+          "type": "u16"
+        },
+        {
+          "name": "other_count",
+          "type": "u16"
+        },
+        {
+          "name": "reachable_stake_pct",
+          "type": "u8"
         }
       ]
     },
@@ -601,6 +625,32 @@
             "name": "tpu_probed",
             "docs": ["Total validators probed this round"],
             "type": "u16"
+          },
+          {
+            "name": "agave_count",
+            "docs": ["Client distributions"],
+            "type": "u16"
+          },
+          {
+            "name": "firedancer_count",
+            "type": "u16"
+          },
+          {
+            "name": "jito_count",
+            "type": "u16"
+          },
+          {
+            "name": "solana_labs_count",
+            "type": "u16"
+          },
+          {
+            "name": "other_count",
+            "type": "u16"
+          },
+          {
+            "name": "reachable_stake_pct",
+            "docs": ["% of total stake (by lamports) reachable via QUIC probe"],
+            "type": "u8"
           }
         ]
       }
@@ -637,6 +687,30 @@
           {
             "name": "slot",
             "type": "u64"
+          },
+          {
+            "name": "agave_count",
+            "type": "u16"
+          },
+          {
+            "name": "firedancer_count",
+            "type": "u16"
+          },
+          {
+            "name": "jito_count",
+            "type": "u16"
+          },
+          {
+            "name": "solana_labs_count",
+            "type": "u16"
+          },
+          {
+            "name": "other_count",
+            "type": "u16"
+          },
+          {
+            "name": "reachable_stake_pct",
+            "type": "u8"
           }
         ]
       }
@@ -745,6 +819,26 @@
                 7
               ]
             }
+          },
+          {
+            "name": "agave_pct",
+            "type": "u8"
+          },
+          {
+            "name": "firedancer_pct",
+            "type": "u8"
+          },
+          {
+            "name": "jito_pct",
+            "type": "u8"
+          },
+          {
+            "name": "solana_labs_pct",
+            "type": "u8"
+          },
+          {
+            "name": "other_pct",
+            "type": "u8"
           },
           {
             "name": "bump",
@@ -985,6 +1079,57 @@
               "Running total of slot latency values for observers in this region"
             ],
             "type": "u64"
+          },
+          {
+            "name": "agave_count",
+            "docs": ["Client distribution counts for this region"],
+            "type": "u16"
+          },
+          {
+            "name": "firedancer_count",
+            "type": "u16"
+          },
+          {
+            "name": "jito_count",
+            "type": "u16"
+          },
+          {
+            "name": "solana_labs_count",
+            "type": "u16"
+          },
+          {
+            "name": "other_count",
+            "type": "u16"
+          },
+          {
+            "name": "total_agave_count",
+            "docs": ["Running totals"],
+            "type": "u32"
+          },
+          {
+            "name": "total_firedancer_count",
+            "type": "u32"
+          },
+          {
+            "name": "total_jito_count",
+            "type": "u32"
+          },
+          {
+            "name": "total_solana_labs_count",
+            "type": "u32"
+          },
+          {
+            "name": "total_other_count",
+            "type": "u32"
+          },
+          {
+            "name": "reachable_stake_pct",
+            "docs": ["Stake-weighted reachability for this region"],
+            "type": "u8"
+          },
+          {
+            "name": "total_reachable_stake_pct",
+            "type": "u32"
           }
         ]
       }
