@@ -1,5 +1,16 @@
+## s0nar-ecosystem
+
+<p>
+    <a href="https://github.com/s0nar-nw/s0nar-observer">s0nar-observer</a>
+    <a href="https://github.com/s0nar-nw/s0nar-program">s0nar-program</a>
+    <a href="https://github.com/s0nar-nw/s0nar-web">s0nar-web</a>
+    <a href="https://github.com/s0nar-nw/s0nar-agent">s0nar-agent</a>
+</p>
+
+---
+
 <p align="center">
-  <img src="public/logo.svg" alt="s0nar" width="320" />
+  <img src="public/text-logo.svg" alt="s0nar" width="320" />
 </p>
 
 <h1 align="center">s0nar-sdk</h1>
@@ -173,19 +184,19 @@ await client.removeEventListener(id);
 
 ### Utility helpers
 
-| Function                                 | Purpose                                            |
-| ---------------------------------------- | -------------------------------------------------- |
-| `isStale(networkHealth, currentSlot)`    | True if oracle data older than 150 slots           |
-| `isObserverStale(observer, currentSlot)` | Same check per observer                            |
-| `isDegraded(networkHealth, threshold?)`  | True if score below threshold (default 70)         |
-| `healthStatus(networkHealth)`            | Returns `"healthy"`, `"degraded"`, or `"critical"` |
-| `regionLabel(region)`                    | UI label like `"United States"` for `Region.US`    |
-| `lamportsToSol(lamports)`                | Convert bigint lamports to SOL number              |
-| `latencyScore(slotLatencyMs)`            | Compute the on-chain latency component score       |
-| `isConsensusCritical(reachableStakePct)` | True when stake reach below 67% finality threshold |
+| Function                                 | Purpose                                                 |
+| ---------------------------------------- | ------------------------------------------------------- |
+| `isStale(networkHealth, currentSlot)`    | True if oracle data older than 150 slots                |
+| `isObserverStale(observer, currentSlot)` | Same check per observer                                 |
+| `isDegraded(networkHealth, threshold?)`  | True if score below threshold (default 70)              |
+| `healthStatus(networkHealth)`            | Returns `"healthy"`, `"degraded"`, or `"critical"`      |
+| `regionLabel(region)`                    | UI label like `"United States"` for `Region.US`         |
+| `lamportsToSol(lamports)`                | Convert bigint lamports to SOL number                   |
+| `latencyScore(slotLatencyMs)`            | Compute the on-chain latency component score            |
+| `isConsensusCritical(reachableStakePct)` | True when stake reach below 67% finality threshold      |
 | `stakeReachStatus(reachableStakePct)`    | `"healthy"` (>=80%), `"degraded"` (>=67%), `"critical"` |
-| `dominantClient(regionScore)`            | Largest validator client in a region by count      |
-| `clientDiversityIndex(regionScore)`      | 0-100 score. 100 = perfectly even, 0 = monoculture |
+| `dominantClient(regionScore)`            | Largest validator client in a region by count           |
+| `clientDiversityIndex(regionScore)`      | 0-100 score. 100 = perfectly even, 0 = monoculture      |
 
 ### PDA helpers
 
